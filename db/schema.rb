@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_18_101242) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_22_061823) do
   create_table "blogs", force: :cascade do |t|
     t.text "title"
     t.string "description"
@@ -31,11 +31,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_101242) do
   end
 
   create_table "likes", force: :cascade do |t|
-    t.integer "no_of_likes"
+    t.text "like_no"
+    t.integer "user_id", null: false
     t.integer "blog_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["blog_id"], name: "index_likes_on_blog_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -50,4 +52,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_101242) do
   add_foreign_key "comments", "blogs"
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "blogs"
+  add_foreign_key "likes", "users"
 end

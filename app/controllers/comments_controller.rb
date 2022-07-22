@@ -1,10 +1,10 @@
 class CommentsController < ApplicationController 
-  before_action :set_comment, only: %i[ show index update destroy ]
+  before_action :set_comment, only: %i[ show update destroy ]
 
   # GET /comments
   def index
     get_blogId
-    @comments = Comment.where(blog_id: blogId ).all
+    @comments = Comment.where(blog_id: @blogId ).all
 
     render json: @comments
   end
