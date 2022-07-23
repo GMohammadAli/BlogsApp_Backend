@@ -3,8 +3,7 @@ class CommentsController < ApplicationController
 
   # GET /comments
   def index
-    get_blogId
-    @comments = Comment.where(blog_id: @blogId ).all
+    @comments = Comment.all
 
     render json: @comments
   end
@@ -17,7 +16,8 @@ class CommentsController < ApplicationController
   # POST /comments
   def create
     @comment = Comment.new(comment_params)
-    @comment.user_id = @current_user.id
+    get_userId
+    @comment.user_id = @userId
     get_blogId
     @comment.blog_id = @blogId
 
@@ -45,6 +45,12 @@ class CommentsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def get_userId
+        id = request.url.split('/')
+        # You need start with '@' for a var to be available globally
+        @userId = id[-4]
+    end
+
     def get_blogId
         id = request.url.split('/')
         # You need start with '@' for a var to be available globally

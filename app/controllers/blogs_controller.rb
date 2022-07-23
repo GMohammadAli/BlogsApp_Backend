@@ -36,7 +36,7 @@ class BlogsController < ApplicationController
 
   # DELETE /blogs/1
   def destroy
-    @like = Like.where(blog_id: @blog.id).destroy_all
+    Comment.where(blog_id: @blog.id).destroy_all
     @blog.destroy
     render json: {msg:"Blog Deleted!"}
   end

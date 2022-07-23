@@ -10,13 +10,15 @@ class LikesController < ApplicationController
 
   # POST /likes
   def create
-    @like = Like.new(like_params)
-    @like.user_id = @current_user.id
+    get_userId
     get_blogId
+    # Like.where(blog_id: @blogId && user wala).destroy_all
+    @like = Like.new(like_params)
+    @like.user_id = @userId
     @like.blog_id = @blogId
 
     if @like.save
-      render json: @like, status: :created, location: @like
+    render json: @like, status: :created
     else
       render json: @like.errors, status: :unprocessable_entity
     end
@@ -38,6 +40,12 @@ class LikesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def get_userId
+        id = request.url.split('/')
+        # You need start with '@' for a var to be available globally
+        @userId = id[-4]
+    end
+
     def get_blogId
         id = request.url.split('/')
         # You need start with '@' for a var to be available globally
@@ -50,6 +58,6 @@ class LikesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def like_params
-      params.require(:like).permit(:like_no)
+      params.require(:like).permit(:liked_by)
     end
 end

@@ -35,8 +35,9 @@ class UsersController < ApplicationController
 
     # DELETE /users/{username}
     def destroy 
-        @blogs = Blog.all
-        @blogs.where(user_id: @user.id).destroy_all
+        # Comment.where(blog_id: @blog.id).destroy_all
+        # Like.where(blog_id: @blog.id).destroy_all
+        Blog.where(user_id: @user.id).destroy_all
         @user.destroy
 
         render  json: { message:"User Deleted" }
