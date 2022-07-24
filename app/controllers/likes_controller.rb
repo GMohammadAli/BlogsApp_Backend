@@ -12,16 +12,23 @@ class LikesController < ApplicationController
   def create
     get_userId
     get_blogId
-    # Like.where(blog_id: @blogId && user wala).destroy_all
-    @like = Like.new(like_params)
-    @like.user_id = @userId
-    @like.blog_id = @blogId
+    likeToDestroy = Like.where(user_id: @userId )
+    likeDestroyed = likeToDestroy.where(blog_id: @blogId)
+    # Checking if a blog is already liked
+      if likeDestroyed.length==0 
+        @like = Like.new(like_params)
+        @like.user_id = @userId
+        @like.blog_id = @blogId
+        @like.liked_by = @userId
 
-    if @like.save
-    render json: @like, status: :created
-    else
-      render json: @like.errors, status: :unprocessable_entity
-    end
+        if @like.save
+          render json: @like, status: :created
+        else
+          render json: @like.errors, status: :unprocessable_entity
+        end
+      else
+        render json: {message: "Already Liked!"}
+      end
   end
 
   # PATCH/PUT /likes/1
